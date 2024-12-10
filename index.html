@@ -34,8 +34,9 @@
                     }       
             else {
                 // running local
-                // display the data
-                jsPsych.data.displayData();
+                function() {
+                  jsPsych.data.get().localSave('csv','mydata.csv');
+                }
                     }
         
       }
