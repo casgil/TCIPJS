@@ -7,20 +7,10 @@
     <script src="./jspsych/plugin-html-button-response.js"></script>
     <script src="./jspsych/plugin-tcip-wait.js"></script>
     <link href="./jspsych/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="./main.js"></script>
+    <script src="./lib/taskflow/client.js"></script>
     <style>
-        /* Ensure proper styling in iframe */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-        
-        /* Make sure jsPsych content is visible */
-        #jspsych-content {
-            margin: 20px auto;
-            max-width: 800px;
-        }
+            
     </style>
   </head>
   <body>
@@ -78,165 +68,176 @@
     const addInline = '</p><br><p style="font-size:25px;text-align:center;width:800px;height:30px;padding:30px">Click the shape to collect your points!</p>';
     const blockInline = '<p style=width:800px;height:30px;padding:30px></p>';
 
+   
+
+  
+
     function getPoints() {
-        if (type === 'wait') {
-            return pointStyle + points + waitInline
-        }
-        else if (type === 'add') {
-            return pointStyle + points + addInline
-        }
-        else {
-            return pointStyle + points +'</p>'
-        }
+    if (type === 'wait') {
+      return pointStyle + points + waitInline
     }
-    
+    else if (type === 'add') {
+      return pointStyle + points + addInline
+    }
+    else {
+      return pointStyle + points +'</p>'
+    }
+  }
     function getDelay() {
-        return delay
-    }
+    return delay
+  }
 
-    function getShape() {
-        if (type === 'wait') {
-            if (shape === 'Circle') {
-                return circleInline + 'background-color:grey;"></button>' 
-            }
-            else { 
-                return squareInline + 'background-color:grey;"></button>'
-            }
-        }
-        else {
-            if (shape === 'Circle') {
-                return circleInline + '"></button>' 
-            }
-            else { 
-                return squareInline + '"></button>'
-            }
-        }
+  function getShape() {
+    if (type === 'wait') {
+     if (shape === 'Circle') {
+      return circleInline + 'background-color:grey;"></button>' }
+     else { 
+      return squareInline + 'background-color:grey;"></button>'
     }
-
-    function getPrompt() {
-        if (shape === 'Circle') {
-            outputDelay = delay / 1000;
-            return '<p>You will receive 5 points in ' + outputDelay + ' seconds</p>'
-        }
-        else {
-            return '<p>You will receive 15 points in 15 seconds</p>'
-        }
+  }
+  else {
+    if (shape === 'Circle') {
+      return circleInline + '"></button>' }
+     else { 
+      return squareInline + '"></button>'
     }
+  }
+  }
 
-    var instructions_1 = {
+  function getPrompt() {
+    if (shape === 'Circle') {
+    outputDelay = delay / 1000;
+    return '<p>You will receive 5 points in ' + outputDelay + ' seconds</p>'
+  }
+  else {
+    return '<p>You will receive 15 points in 15 seconds</p>'
+  }
+  }
+
+
+
+  var instructions_1 = {
         type: jsPsychHtmlButtonResponse,
         stimulus: '<p>In this task, you will see a circle and a square in the middle of the screen.<br><br><br></p>',
         choices: ['NEXT'],
+
     }
 
     var instructions_2 = {
         type: jsPsychHtmlButtonResponse,
         stimulus: '<p>The first time you click on the circle, a delay of 5 seconds gives you five points. <br><br> However, every time you click the circle after that, the delay will increase by one second and you will still get 5 points.</p>',
         choices: ['NEXT'],
+
     }
 
     var instructions_3 = {
         type: jsPsychHtmlButtonResponse,
         stimulus: '<p>Clicking on the square will always give you 15 points after a delay of 15 seconds.<br><br><br></p>',
         choices: ['NEXT'],
+
     }
 
     var instructions_4 = {
         type: jsPsychHtmlButtonResponse,
         stimulus: '<p>Points are shown in the top left corner. You will have ' + trials + ' chances to gain points.<br><br>The goal is to gain as many points as possible.</p>',
         choices: ['START'],
+
     }
+
 
     var choice = {
-        type: jsPsychHtmlButtonResponse,
-        stimulus: getPoints,
-        choices: ['Circle', 'Square'],
-        button_html: [circleInline + '"></button>', squareInline + '"></button>'],
-        margin_horizontal: "100px",
-        margin_vertical: "200px",
-        response_ends_trial: true,
-        prompt: blockInline,
-        data: {
-            task: 'choice',
-        },
-        on_finish: function(data){
-            type = 'wait';
-            if (data.response === 0) {
-                circleCount++;
-                delay = (circleCount - 1) * 1000 + 5000;
-                delay > 15000 ? delay = 15000 : delay = delay;
-                data.delay = delay;  
-                shape = 'Circle';
-                data.shape = shape;
-            } 
-            else if (data.response === 1) {
-                delay = 15000;
-                data.delay = delay;
-                shape = 'Square';
-                data.shape = shape;
-            }
+    type: jsPsychHtmlButtonResponse,
+    stimulus: getPoints,
+    choices: ['Circle', 'Square'],
+    button_html: [circleInline + '"></button>', squareInline + '"></button>'],
+    margin_horizontal: "100px",
+    margin_vertical: "200px",
+    response_ends_trial: true,
+    prompt: blockInline,
+    data: {
+        task: 'choice',
+      },
+    on_finish: function(data){
+      type = 'wait';
+        if (data.response === 0) {
+            circleCount++;
+            delay = (circleCount - 1) * 1000 + 5000;
+            delay > 15000 ? delay = 15000 : delay = delay;
+            data.delay = delay;  
+            shape = 'Circle';
+            data.shape = shape;
+            
+        } 
+        else if (data.response === 1) {
+            delay = 15000;
+            data.delay = delay;
+            shape = 'Square';
+            data.shape = shape;
         }
-    }
+        
+      }
+}
 
-    var wait = {
-        type: jsPsychTCIPWait,
-        choices: [shape],
-        stimulus: getPoints,
-        button_html: [getShape],
-        response_ends_trial: false,
-        margin_horizontal: "100px",
-        margin_vertical: "100px",
-        trial_duration: getDelay,
-        prompt: getPrompt,
-        data: {
-            task: 'wait',
-        },
-        on_finish: function(data){ 
-            type = 'add';
+var wait = {
+    type: jsPsychTCIPWait,
+    choices: [shape],
+    stimulus: getPoints,
+    button_html: [getShape],
+    response_ends_trial: false,
+    margin_horizontal: "100px",
+    margin_vertical: "100px",
+    trial_duration: getDelay,
+    prompt: getPrompt,
+    data: {
+        task: 'wait',
+      },
+      on_finish: function(data){ 
+        type = 'add';
+      }
+}
+
+var add = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: getPoints,
+    choices: [shape],
+    button_html: [getShape],
+    response_ends_trial: true,
+    margin_horizontal: "100px",
+    margin_vertical: "100px",
+    prompt: blockInline,
+    data: {
+        task: 'add'
+      },
+      on_finish: function(data){
+        type = 'choice';
+        if (shape === 'Circle') {
+          points = points + 5;
+          data.points = points;
+              
+        } 
+        else if (shape === 'Square') {
+            points = points + 15;
+            data.points = points
+            
         }
-    }
+        
+      }
+}
 
-    var add = {
-        type: jsPsychHtmlButtonResponse,
-        stimulus: getPoints,
-        choices: [shape],
-        button_html: [getShape],
-        response_ends_trial: true,
-        margin_horizontal: "100px",
-        margin_vertical: "100px",
-        prompt: blockInline,
-        data: {
-            task: 'add'
-        },
-        on_finish: function(data){
-            type = 'choice';
-            if (shape === 'Circle') {
-                points = points + 5;
-                data.points = points;
-            } 
-            else if (shape === 'Square') {
-                points = points + 15;
-                data.points = points
-            }
-        }
-    }
 
-    timeline.push(instructions_1);
-    timeline.push(instructions_2);
-    timeline.push(instructions_3);
-    timeline.push(instructions_4);
+timeline.push(instructions_1);
+timeline.push(instructions_2);
+timeline.push(instructions_3);
+timeline.push(instructions_4);
 
-    var block = {
-        timeline: [choice, wait, add],
-        repetitions: trials,
+var block = {
+      timeline: [choice, wait, add],
+      repetitions: trials,
     };
     timeline.push(block);
+    /*start task*/
+      jsPsych.run(timeline);
     
-    // Add a small delay to ensure everything is loaded
-    setTimeout(() => {
-        jsPsych.run(timeline);
-    }, 100);
 
   </script>
 </html>
-
