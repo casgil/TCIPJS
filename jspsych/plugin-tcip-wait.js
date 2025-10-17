@@ -113,7 +113,7 @@ var jsPsychTCIPWait = (function (jspsych) {
                       "</div>";
           }
           html += "</div>";
-          html += '<div class="progress-bar"><div class="progress"></div></div>';
+          html += '<div class="progress-bar" style="width: 100%; height: 20px; background-color: #f0f0f0; border-radius: 10px; margin: 20px 0; overflow: hidden;"><div class="progress" style="height: 100%; background-color: #4CAF50; width: 0%; transition: width 0.1s ease-out; border-radius: 10px;"></div></div>';
           //show prompt if there is one
           if (trial.prompt !== null) {
               html += trial.prompt;
@@ -125,18 +125,23 @@ var jsPsychTCIPWait = (function (jspsych) {
           //progress bar animation
           function animateProgressBar(duration) {
             let progress = 0;
-            console.log(duration);
+            console.log('Progress bar duration:', duration, 'ms');
             let progressBar = document.querySelector('.progress');
-            const increment = 1 / duration * 1750; // Adjust the increment value for desired smoothness
+            
+            // Calculate correct timing: 100% over the full duration
+            const totalSteps = 100; // 100 steps to reach 100%
+            const stepDuration = duration / totalSteps; // Time per step in milliseconds
+            const increment = 100 / totalSteps; // Progress increment per step (1%)
       
             const interval = setInterval(() => {
               progress += increment;
-              progressBar.style.width = `${progress}%`;
+              progressBar.style.width = `${Math.min(progress, 100)}%`;
       
               if (progress >= 100) {
                 clearInterval(interval);
+                console.log('Progress bar completed');
               }
-            }, duration / 1000); // Adjust the interval duration for desired speed
+            }, stepDuration); // Update every stepDuration milliseconds
           } 
           animateProgressBar(trial.trial_duration)
 
