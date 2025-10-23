@@ -24,7 +24,7 @@
 
 Qualtrics.SurveyEngine.addOnload(function() {
     // Hide the question text/description
-    this.hideQuestion();
+    this.getQuestionContainer().style.display = 'none';
     
     console.log('TCIP Qualtrics integration starting...');
     
