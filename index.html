@@ -14,12 +14,66 @@
             padding: 0;
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
+            overflow-x: hidden; /* Prevent horizontal overflow */
         }
         
         /* Make sure jsPsych content is visible */
         #jspsych-content {
             margin: 20px auto;
             max-width: 800px;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0 10px;
+        }
+        
+        /* Prevent elements from overflowing */
+        * {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        
+        /* Responsive adjustments for mobile */
+        @media (max-width: 768px) {
+            #jspsych-content {
+                margin: 10px auto;
+                padding: 0 5px;
+            }
+            
+            /* Make all p elements with inline styles responsive */
+            p[style*="width:800px"],
+            p[style*="width: 800px"],
+            p[style*="width:100%"] {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            
+            /* Scale down font sizes on mobile */
+            p[style*="font-size:30px"] {
+                font-size: 20px !important;
+            }
+            
+            p[style*="font-size:25px"] {
+                font-size: 16px !important;
+            }
+        }
+        
+        /* Prevent button overflow */
+        .jspsych-btn {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        
+        /* Ensure text wraps properly */
+        p {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        /* Container adjustments for very small screens */
+        @media (max-width: 480px) {
+            #jspsych-content {
+                padding: 0;
+            }
         }
     </style>
   </head>
@@ -71,22 +125,48 @@
     let shape = '';
     let type = '';
     let outputDelay = 0;
-    const pointStyle = '<p style="font-size:30px;color:white;text-align:left;background-color:#393939;width:800px;height:30px;padding:30px">Current Points: ';
+    
+    // Get responsive width based on screen size
+    function getResponsiveWidth() {
+        return window.innerWidth < 768 ? '100%' : '800px';
+    }
+    
+    function getResponsivePadding() {
+        return window.innerWidth < 768 ? '15px' : '30px';
+    }
+    
+    const pointStyle = function() {
+        const width = getResponsiveWidth();
+        const padding = getResponsivePadding();
+        return '<p style="font-size:30px;color:white;text-align:left;background-color:#393939;width:' + width + ';height:auto;padding:' + padding + ';max-width:100%;box-sizing:border-box;">Current Points: ';
+    };
     const circleInline = '<button class="buttonCircle" style="height:100px;width:100px;';
     const squareInline = '<button class="buttonSquare" style="height:100px;width:100px;';
-    const waitInline = '</p><br><p style="font-size:25px;text-align:center;width:800px;height:30px;padding:30px">Please wait... Points are loading</p>';
-    const addInline = '</p><br><p style="font-size:25px;text-align:center;width:800px;height:30px;padding:30px">Click the shape to collect your points!</p>';
-    const blockInline = '<p style=width:800px;height:30px;padding:30px></p>';
+    const waitInline = function() {
+        const width = getResponsiveWidth();
+        const padding = getResponsivePadding();
+        return '</p><br><p style="font-size:25px;text-align:center;width:' + width + ';height:auto;padding:' + padding + ';max-width:100%;box-sizing:border-box;">Please wait... Points are loading</p>';
+    };
+    const addInline = function() {
+        const width = getResponsiveWidth();
+        const padding = getResponsivePadding();
+        return '</p><br><p style="font-size:25px;text-align:center;width:' + width + ';height:auto;padding:' + padding + ';max-width:100%;box-sizing:border-box;">Click the shape to collect your points!</p>';
+    };
+    const blockInline = function() {
+        const width = getResponsiveWidth();
+        const padding = getResponsivePadding();
+        return '<p style="width:' + width + ';height:30px;padding:' + padding + ';max-width:100%;box-sizing:border-box;"></p>';
+    };
 
     function getPoints() {
         if (type === 'wait') {
-            return pointStyle + points + waitInline
+            return pointStyle() + points + waitInline()
         }
         else if (type === 'add') {
-            return pointStyle + points + addInline
+            return pointStyle() + points + addInline()
         }
         else {
-            return pointStyle + points +'</p>'
+            return pointStyle() + points +'</p>'
         }
     }
     
@@ -147,13 +227,22 @@
         choices: ['START'],
     }
 
+    // Get responsive margins
+    function getHorizontalMargin() {
+        return window.innerWidth < 768 ? "10px" : "100px";
+    }
+    
+    function getVerticalMargin() {
+        return window.innerWidth < 768 ? "50px" : "100px";
+    }
+
     var choice = {
         type: jsPsychHtmlButtonResponse,
         stimulus: getPoints,
         choices: ['Circle', 'Square'],
         button_html: [circleInline + '"></button>', squareInline + '"></button>'],
-        margin_horizontal: "100px",
-        margin_vertical: "200px",
+        margin_horizontal: getHorizontalMargin(),
+        margin_vertical: window.innerWidth < 768 ? "50px" : "200px",
         response_ends_trial: true,
         prompt: blockInline,
         data: {
@@ -184,8 +273,8 @@
         stimulus: getPoints,
         button_html: [getShape],
         response_ends_trial: false,
-        margin_horizontal: "100px",
-        margin_vertical: "100px",
+        margin_horizontal: getHorizontalMargin(),
+        margin_vertical: getVerticalMargin(),
         trial_duration: getDelay,
         prompt: getPrompt,
         data: {
@@ -202,8 +291,8 @@
         choices: [shape],
         button_html: [getShape],
         response_ends_trial: true,
-        margin_horizontal: "100px",
-        margin_vertical: "100px",
+        margin_horizontal: getHorizontalMargin(),
+        margin_vertical: getVerticalMargin(),
         prompt: blockInline,
         data: {
             task: 'add'
