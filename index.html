@@ -205,25 +205,25 @@
 
     var instructions_1 = {
         type: jsPsychHtmlButtonResponse,
-        stimulus: '<p>In this task, you will see a circle and a square in the middle of the screen.<br><br><br></p>',
-        choices: ['NEXT'],
+        stimulus: '<p><strong>Welcome to the Decision Making Task!</strong><br><br>In this task, you will choose between two shapes: a circle and a square.<br><br>Each choice will earn you points, but you will need to wait different amounts of time to collect them.</p>',
+        choices: ['NEXT', 'SKIP INSTRUCTIONS'],
     }
 
     var instructions_2 = {
         type: jsPsychHtmlButtonResponse,
-        stimulus: '<p>The first time you click on the circle, a delay of 5 seconds gives you five points. <br><br> However, every time you click the circle after that, the delay will increase by one second and you will still get 5 points.</p>',
+        stimulus: '<p><strong>The Circle Choice:</strong><br><br>• First time: Wait 5 seconds → Get 5 points<br>• Second time: Wait 6 seconds → Get 5 points<br>• Third time: Wait 7 seconds → Get 5 points<br>• And so on...<br><br>The wait time gets longer each time you choose the circle, but you always get exactly 5 points.</p>',
         choices: ['NEXT'],
     }
 
     var instructions_3 = {
         type: jsPsychHtmlButtonResponse,
-        stimulus: '<p>Clicking on the square will always give you 15 points after a delay of 15 seconds.<br><br><br></p>',
+        stimulus: '<p><strong>The Square Choice:</strong><br><br>• Every time: Wait 15 seconds → Get 15 points<br><br>The square choice is always the same: wait 15 seconds and get 15 points. The wait time never changes.</p>',
         choices: ['NEXT'],
     }
 
     var instructions_4 = {
         type: jsPsychHtmlButtonResponse,
-        stimulus: '<p>Points are shown in the top left corner. You will have ' + trials + ' chances to gain points.<br><br>The goal is to gain as many points as possible.</p>',
+        stimulus: '<p><strong>How to Play:</strong><br><br>• You will make ' + trials + ' choices total<br>• Your points are shown in the top-left corner<br>• After choosing, you must wait for the countdown to finish<br>• Then click the shape again to collect your points<br><br><strong>Goal:</strong> Earn as many points as possible!<br><br>Think carefully about which choice gives you the best points for the time you wait.</p>',
         choices: ['START'],
     }
 
@@ -310,10 +310,24 @@
         }
     }
 
+    // Add first instruction screen
     timeline.push(instructions_1);
-    timeline.push(instructions_2);
-    timeline.push(instructions_3);
-    timeline.push(instructions_4);
+    
+    // Add conditional instructions based on first screen response
+    var conditional_instructions = {
+        timeline: [instructions_2, instructions_3, instructions_4],
+        conditional_function: function() {
+            // Check if participant chose to skip instructions (response 1 = "SKIP INSTRUCTIONS")
+            var data = jsPsych.data.getLastTrialData();
+            if (data.values()[0].response === 1) {
+                return false; // Skip the remaining instructions
+            } else {
+                return true; // Continue with instructions
+            }
+        }
+    };
+    
+    timeline.push(conditional_instructions);
 
     var block = {
         timeline: [choice, wait, add],
