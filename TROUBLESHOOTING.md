@@ -6,8 +6,10 @@ If your TCIP task is not starting when embedded in Qualtrics, follow these troub
 
 ## 🔧 Immediate Solutions
 
-### 1. **Use the Improved Integration Code**
-Replace your current integration code with `qualtrics-tcip-integration-improved.js`. This version includes:
+### 1. **Use the Production Integration Code**
+For live surveys, use `qualtrics-tcip-production.js` (FINAL). If you are diagnosing issues, you may temporarily use test scripts like `qualtrics-tcip-integration-improved.js`. The production script is the recommended default.
+
+Test script includes:
 - Better error handling and debugging
 - Enhanced timeout protection
 - Improved iframe loading detection
@@ -117,7 +119,8 @@ iframe.onload = function() {
 
 ## 🚀 Quick Fix Checklist
 
-- [ ] **Use `qualtrics-tcip-integration-improved.js`** (not the original version)
+- [ ] **Use `qualtrics-tcip-production.js`** for production surveys
+- [ ] If debugging, you may try `qualtrics-tcip-integration-improved.js` (test-only)
 - [ ] **Replace `index.html` with `index-simplified.html`** (removes missing dependencies)
 - [ ] **Test task independently** with `test-task.html` first
 - [ ] **Check browser console** for error messages

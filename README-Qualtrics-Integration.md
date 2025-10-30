@@ -2,10 +2,12 @@
 
 This guide explains how to integrate the Two Choice Impulsivity Paradigm (TCIP) task into a Qualtrics survey.
 
+Important: Use `qualtrics-tcip-production.js` for production surveys. All other Qualtrics JS files in this repo are test/fallback utilities only.
+
 ## Files Included
 
-1. **`qualtrics-tcip-integration.js`** - The main integration code to paste into Qualtrics
-2. **`tcip-qualtrics-modified.html`** - Modified version of the TCIP task that supports data transmission
+1. **`qualtrics-tcip-production.js`** - FINAL production integration script (use this in your survey)
+2. Other files in `qualtrics js test files/` - Test/fallback scripts for diagnostics and edge cases
 3. **`README-Qualtrics-Integration.md`** - This instruction guide
 
 ## Setup Instructions
@@ -16,7 +18,7 @@ This guide explains how to integrate the Two Choice Impulsivity Paradigm (TCIP) 
 2. Deploy the updated task to your web server (e.g., GitHub Pages)
 3. Ensure the task is accessible at the URL you'll use in the integration code
 
-### Step 2: Set Up Qualtrics Survey
+### Step 2: Set Up Qualtrics Survey (Production)
 
 1. **Create a new question** in your Qualtrics survey:
    - Question Type: **Text/Graphic**
@@ -25,7 +27,7 @@ This guide explains how to integrate the Two Choice Impulsivity Paradigm (TCIP) 
 2. **Add the integration code**:
    - Click on the question to select it
    - Click the **JavaScript** button in the question options
-   - Copy and paste the entire content of `qualtrics-tcip-integration.js`
+   - Copy and paste the entire content of `qualtrics-tcip-production.js`
    - Click **Save**
 
 3. **Update the task URL** (if needed):
@@ -52,7 +54,7 @@ The integration automatically creates the following embedded data fields in your
 - `TCIP_TaskCompleted` - Whether task was completed successfully
 - `TCIP_DataTimestamp` - When data was processed
 
-## How It Works
+## How It Works (Production Script)
 
 1. **Task Loading**: The integration creates an iframe that loads your TCIP task
 2. **Data Collection**: The modified task collects all behavioral data as usual
@@ -174,3 +176,4 @@ For technical issues:
 - **v1.0**: Initial integration with basic data capture
 - **v1.1**: Added error handling and timeout protection
 - **v1.2**: Enhanced data processing and summary statistics
+- **v1.3**: Production script consolidated as `qualtrics-tcip-production.js`; others marked test-only

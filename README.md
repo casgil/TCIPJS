@@ -59,15 +59,15 @@ TCIPJS/
 
 There are multiple integration paths depending on your organization's iframe policies and needs. In all cases, host this repository (e.g., GitHub Pages) and use that URL in Qualtrics.
 
-Recommended paths:
+Recommended paths (production vs. test-only):
 
-1) Production integration (automatic capture)
-- Use `qualtrics-tcip-production.js` in a Text/Graphic question's JavaScript
+1) Production integration (automatic capture) — FINAL
+- Use `qualtrics-tcip-production.js` in a Text/Graphic question's JavaScript (this is the production-supported file)
 - The task runs in an iframe and, upon completion, sends data via `postMessage` with type `TCIP_COMPLETE`
 - The script processes trial data and stores summary metrics as Embedded Data
 
-2) Simple/backup options
-- See `SIMPLE-INTEGRATION-GUIDE.md` for options:
+2) Simple/backup options — TEST ONLY
+- See `SIMPLE-INTEGRATION-GUIDE.md` for test/fallback options:
   - `qualtrics-tcip-simple.js` (automatic capture, minimal code)
   - `qualtrics-tcip-ultra-simple.js` (manual continue, no auto capture)
   - `qualtrics-tcip-direct.js` (loads task directly without iframe)

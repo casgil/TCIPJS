@@ -1,8 +1,10 @@
 # Simple Qualtrics Integration Options
 
+Note: The FINAL production script is `qualtrics-tcip-production.js`. The options in this guide are test/fallback approaches for environments where the production script cannot be used as-is.
+
 Since the complex integration isn't working, here are 3 simple alternatives:
 
-## Option 1: Simple Integration (`qualtrics-tcip-simple.js`)
+## Option 1: Simple Integration (`qualtrics-tcip-simple.js`) — TEST ONLY
 **Best for**: Automatic data capture with minimal code
 
 **What it does**:
@@ -25,7 +27,7 @@ Since the complex integration isn't working, here are 3 simple alternatives:
 
 ---
 
-## Option 2: Ultra Simple (`qualtrics-tcip-ultra-simple.js`)
+## Option 2: Ultra Simple (`qualtrics-tcip-ultra-simple.js`) — TEST ONLY
 **Best for**: When automatic data capture fails
 
 **What it does**:
@@ -46,7 +48,7 @@ Since the complex integration isn't working, here are 3 simple alternatives:
 
 ---
 
-## Option 3: Direct Integration (`qualtrics-tcip-direct.js`)
+## Option 3: Direct Integration (`qualtrics-tcip-direct.js`) — TEST ONLY
 **Best for**: When iframe communication fails
 
 **What it does**:
@@ -67,9 +69,10 @@ Since the complex integration isn't working, here are 3 simple alternatives:
 
 ## 🎯 Recommended Approach
 
-**Try in this order**:
+**Try in this order** (use production first):
 
-1. **Start with Option 1** (`qualtrics-tcip-simple.js`)
+0. **Production**: Use `qualtrics-tcip-production.js` (recommended for real surveys)
+1. If needed, **Option 1** (`qualtrics-tcip-simple.js`)
    - If it works, you get automatic data capture
    - If it fails, move to Option 2
 
