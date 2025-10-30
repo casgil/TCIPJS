@@ -10,13 +10,25 @@ The Two Choice Impulsivity Paradigm (TCIP) is a behavioral task that measures im
 
 This implementation uses jsPsych framework and can be integrated into Qualtrics surveys for automated data collection.
 
+## 👀 What Participants See
+
+Participants complete a short decision-making task:
+
+- Choose between two shapes each trial:
+  - Circle: 5 points after a wait that gets 1s longer each time (5s, 6s, 7s, … up to 15s)
+  - Square: 15 points after a fixed 15s wait every time
+- Points are shown at the top-left; there are 15 total choices per session.
+- After choosing, a countdown appears; when the wait ends, participants click the shape again to collect points.
+- On the first screen, repeat participants can select “Skip Instructions” to jump straight to the task.
+
 ## 🎯 Key Features
 
 - **15 trials** per session
 - **Progressive delay system** for circle choices (5s → 6s → 7s → ... → 15s max)
+- **Skip instructions option** on the first screen for repeat participants
 - **Real-time point tracking** with visual feedback
 - **Progress bar animation** during waiting periods
-- **Qualtrics integration** with automatic data capture
+- **Qualtrics integration** with automatic or simplified data capture
 - **Responsive design** for all screen sizes
 
 ## 📁 Project Structure
@@ -45,9 +57,23 @@ TCIPJS/
 
 ### Qualtrics Integration
 
-1. **Copy `qualtrics-tcip-production.js`** into a Qualtrics Text/Graphic question
-2. **Add JavaScript** to the question's JavaScript section
-3. **Test the survey** - task loads automatically with data capture
+There are multiple integration paths depending on your organization's iframe policies and needs. In all cases, host this repository (e.g., GitHub Pages) and use that URL in Qualtrics.
+
+Recommended paths:
+
+1) Production integration (automatic capture)
+- Use `qualtrics-tcip-production.js` in a Text/Graphic question's JavaScript
+- The task runs in an iframe and, upon completion, sends data via `postMessage` with type `TCIP_COMPLETE`
+- The script processes trial data and stores summary metrics as Embedded Data
+
+2) Simple/backup options
+- See `SIMPLE-INTEGRATION-GUIDE.md` for options:
+  - `qualtrics-tcip-simple.js` (automatic capture, minimal code)
+  - `qualtrics-tcip-ultra-simple.js` (manual continue, no auto capture)
+  - `qualtrics-tcip-direct.js` (loads task directly without iframe)
+
+3) Full guide
+- See `README-Qualtrics-Integration.md` for step-by-step setup, embedded data fields, troubleshooting, and customization.
 
 ## 📊 Data Collection
 
@@ -64,6 +90,8 @@ TCIPJS/
 - `TCIP_CompletionTime` - Total time to complete (seconds)
 - `TCIP_RawData` - Complete trial-by-trial data (JSON)
 - `TCIP_Completed` - Task completion status
+
+Note: When run inside Qualtrics, the task posts `TCIP_COMPLETE` with full trial data to the parent window. The integration scripts in `qualtrics js test files/` handle parsing and storing embedded data.
 
 ## 🔧 Technical Details
 
@@ -125,12 +153,20 @@ const squareDelay = 15000; // Square delay (ms)
 
 ## 📚 Citation
 
-If you use this implementation in your research, please cite:
+If you use this implementation in your research, please cite the task and the foundational behavioral measures paper:
 
 ```
 Two Choice Impulsivity Paradigm (TCIP) - JavaScript Implementation
 [Your Institution/Author]
 [Year]
+```
+
+And reference:
+
+```
+Dougherty, D. M., Mathias, C. W., Marsh, D. M., & Jagar, A. A. (2005).
+Laboratory behavioral measures of impulsivity. Behavior Research Methods,
+37(1), 82–90.
 ```
 
 ## 🛠️ Development
@@ -180,7 +216,7 @@ For technical support or questions:
 
 ---
 
-**Version**: 1.0  
-**Last Updated**: 2024  
+**Version**: 1.1  
+**Last Updated**: 2025  
 **Framework**: jsPsych 7.0+  
 **Compatibility**: Modern browsers, mobile devices
